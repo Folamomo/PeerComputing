@@ -1,22 +1,40 @@
 package computinglib;
 
+import peerlib.Peer;
+
 import java.util.Collection;
 import java.util.Optional;
-import java.util.SortedSet;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import static computinglib.Status.IN_PROGRESS;
 
 public class TaskRepository<ResultType> {
-    SortedSet<Task<ResultType>> tasks;
+    SortedMap<Integer, Task<ResultType>> tasks = new TreeMap<>();
 
     public void addTasks(Collection<Task<ResultType>> toAdd) {
-        tasks.addAll(toAdd);
+        toAdd.forEach(task -> tasks.put(task.id, task));
+    }
+
+    public void addTask(Task<ResultType> toAdd) {
+        tasks.put(toAdd.id, toAdd);
+    }
+
+    public Optional<Task<ResultType>> getTask(int id) {
+        return Optional.ofNullable(tasks.get(id));
     }
 
     public Optional<Task<ResultType>> getFirstFreeTask() {
-        return tasks.stream().filter(Task::isFree).filter(Task::dependenciesReady).findFirst();
+        return tasks.values().stream().filter(Task::isFree).filter(Task::dependenciesReady).findFirst();
     }
 
     public void saveDoneTaskFromPeer(Task<ResultType> task) {
-        tasks.remove(task);
-        tasks.add(task);
+        tasks.put(task.id, task);
+    }
+
+    public void markAsInProgress(int id, Peer peer) {
+        Task<ResultType> task = tasks.get(id);
+        task.setHandledBy(peer);
+        task.setStatus(IN_PROGRESS);
     }
 }

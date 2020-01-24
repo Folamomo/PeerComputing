@@ -1,5 +1,7 @@
 package computinglib;
 
+import peerlib.Peer;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
@@ -11,6 +13,7 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
     protected final int id;
     private Instant startedAt;
     private Status status;
+    public Peer handledBy;
     public ResultType result;
     public Collection<Task<ResultType>> dependencies;
 
@@ -44,6 +47,38 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
         return status == FREE;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public Instant getStartedAt() {
+        return startedAt;
+    }
+
+    public void setStartedAt(Instant startedAt) {
+        this.startedAt = startedAt;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Peer getHandledBy() {
+        return handledBy;
+    }
+
+    public void setHandledBy(Peer handledBy) {
+        this.handledBy = handledBy;
+    }
+
+    public void setResult(ResultType result) {
+        this.result = result;
+    }
+
     @Override
     public int hashCode() {
         return id;
@@ -60,9 +95,5 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
         if (o == null || getClass() != o.getClass()) return false;
         Task<?> task = (Task<?>) o;
         return id == task.id;
-    }
-
-    public Instant getStartedAt() {
-        return startedAt;
     }
 }

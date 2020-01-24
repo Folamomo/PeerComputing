@@ -5,21 +5,25 @@ import computinglib.messages.TaskStartedMessage;
 import peerlib.Peer;
 import peerlib.PeerFacade;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class TaskManager implements Runnable {
-    private TaskRepository<?> repository;
+import static computinglib.Status.IN_PROGRESS;
+
+public class TaskManager<ResultType> implements Runnable {
+    private Peer me;
+    private TaskRepository<ResultType> repository;
     private PeerFacade peers;
     private ThreadPoolExecutor executor;
-    private List<Task<?>> running;
+    private List<Task<ResultType>> running;
 
     private int coreThreads = 4;
 
-    public TaskManager(TaskRepository<?> repository, PeerFacade peers) {
+    public TaskManager(TaskRepository<ResultType> repository, PeerFacade peers) {
         this.repository = repository;
         this.peers = peers;
         executor = new ThreadPoolExecutor(coreThreads, coreThreads, 1, TimeUnit.SECONDS, new ArrayBlockingQueue<>(8));
@@ -39,14 +43,15 @@ public class TaskManager implements Runnable {
         }
     }
 
-    private void runTask(Task<?> task) {
+    private void runTask(Task<ResultType> task) {
+        task.setHandledBy(me);
         running.add(task);
         executor.execute(task);
         peers.SendToAll(new TaskStartedMessage(task));
     }
 
     private void saveCompletedTasks() {
-        for (Task<?> task : running) {
+        for (Task<ResultType> task : running) {
             if (task.isDone()) {
                 peers.SendToAll(new TaskCompletedMessage(task));
                 running.remove(task);
@@ -58,7 +63,18 @@ public class TaskManager implements Runnable {
         peers.getMessages().forEach(message -> message.handle(this));
     }
 
-    public void handlePeerTaskStartedMessage(Long taskId, Peer peerId) {
+    public void handlePeerTaskStartedMessage(int taskId, Timestamp siartedAt, Peer peer) {
+        Task<ResultType> task = repository.getTask(taskId).orElseThrow(RuntimeException::new);
+        if (task.getStatus() == IN_PROGRESS && task.getHandledBy() == me) {
 
+        }
+    }
+
+    public void handlePeerTaskCompletedMessage(Task<ResultType> task) {
+        repository.saveDoneTaskFromPeer(task);
+    }
+
+    public void handleNewTaskMessage(Task task) {
+        repository.addTask(task);
     }
 }

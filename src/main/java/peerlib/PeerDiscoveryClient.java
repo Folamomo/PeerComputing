@@ -40,7 +40,9 @@ public class PeerDiscoveryClient extends Thread {
                     peerList.replace(address, date);
                 }
                 for (Map.Entry<InetAddress, Date> entry : peerList.entrySet()) {
-                    // usuń wszystkie peery gdzie data jest starsza niż minuta
+                    if ((date.getTime() - entry.getValue().getTime()) / 1000 > 60) {
+                        peerList.remove(entry.getKey());
+                    }
                 }
             } catch (IOException e) {
                 throw new IOException(e);
