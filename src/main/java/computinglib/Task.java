@@ -1,6 +1,7 @@
 package computinglib;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.concurrent.RunnableFuture;
 
@@ -8,6 +9,7 @@ import static computinglib.Status.*;
 
 public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Serializable, Comparable<Task<ResultType>> {
     protected final int id;
+    private Instant startedAt;
     private Status status;
     public ResultType result;
     public Collection<Task<ResultType>> dependencies;
@@ -19,6 +21,7 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
     @Override
     public void run() {
         this.status = IN_PROGRESS;
+        this.startedAt = Instant.now();
         result = this.calculate();
         this.status = DONE;
     }
@@ -57,5 +60,9 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
         if (o == null || getClass() != o.getClass()) return false;
         Task<?> task = (Task<?>) o;
         return id == task.id;
+    }
+
+    public Instant getStartedAt() {
+        return startedAt;
     }
 }

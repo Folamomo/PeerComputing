@@ -2,8 +2,8 @@ package computinglib;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -11,12 +11,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
-public class Task_Primes extends Task<List<Integer>> {
+public class Task_Primes extends Task<List<Long>> {
 
-    private final int a;
-    private final int b;
+    private final Long a;
+    private final Long b;
 
-    public Task_Primes(int id, int a, int b, Collection<Task<List<Integer>>> dependencies) {
+    public Task_Primes(int id, Long a, Long b, Collection<Task<List<Long>>> dependencies) {
         super(id);
         this.a = a;
         this.b = b;
@@ -24,69 +24,46 @@ public class Task_Primes extends Task<List<Integer>> {
     }
 
     @Override
-    public List<Integer> calculate() {
-        if (this.dependencies != null) {
+    public List<Long> calculate() {
+        List<Long> other_results;
+        if (!this.dependencies.isEmpty()) {
             // Wypełnianie other results poprzednio znalezionymi liczbami pierwszymi
-            List<Integer> other_results = dependencies
+            other_results = dependencies
                     .stream()
                     .flatMap(task -> task.getResult().stream())
                     .collect(Collectors.toList());
-            LinkedList<Integer> result = new LinkedList<>();
+            List<Long> toReturn = new LinkedList<>();
 
 
-            Collections.sort(other_results);
-            // na wypadek gdyby nie były pełne dane
-            for (int i = other_results.get(other_results.size() - 1) + 1; i < Math.sqrt(b); i++) {
-                other_results.add(i);
-            }
+//            Collections.sort(other_results);
+//            // na wypadek gdyby nie były pełne dane
+//            for (int i = other_results.get(other_results.size() - 1) + 1; i < Math.sqrt(b); i++) {
+//                other_results.add(i);
+//            }
 
             System.out.println(other_results);
-
-            // Wypełnianie tablicy wyników liczbami z zakresu
-            for (int i = a; i <= b; i++) {
-                result.add((Integer) i);
-            }
-            Collections.sort(result);
-            System.out.println(result);
-
-            //Sito
-            for (Integer i : other_results) {
-                for (int j = i; j <= b; j = j + i) {
-                    if (result.contains(j)) {
-                        result.remove((Integer) j);
-                    }
-                }
-            }
-            System.out.println(result);
-            return result;
         } else {
-            LinkedList<Integer> result = new LinkedList<>();
-            LinkedList<Integer> numbers = new LinkedList<>();
-
-            // Wypełnianie tablicy wyników liczbami z zakresu
-            for (int i = a; i <= b; i++) {
-                result.add((Integer) i);
+            other_results = new ArrayList<>();
+            for (long i = 2; i < Math.sqrt(b); i++) {
+                other_results.add(i);
             }
-            Collections.sort(result);
-
-
-            // Wypełnianie tablicy liczbami z zakresu 2 do sqrt(b)
-            for (int i = 2; i < Math.sqrt(b); i++) {
-                numbers.add((Integer) i);
-            }
-            Collections.sort(numbers);
-
-            // Sito
-            for (int i : numbers) {
-                for (int j = i + i; j <= b; j = j + i) {
-                    if (result.contains((Integer) j)) {
-                        result.remove((Integer) j);
-                    }
-                }
-            }
-            return result;
         }
 
+        // Wypełnianie tablicy wyników liczbami z zakresu
+        for (Long i = a; i <= b; i++) {
+            result.add(i);
+        }
+
+        System.out.println(result);
+
+        //Sito
+        for (Long i : other_results) {
+            for (long j = a - a % i; j <= b; j = j + i) {
+                result.remove(j);
+            }
+        }
+        System.out.println(result);
+        return result;
     }
 
     public void saveToFile(String filepath) throws IOException {
@@ -95,8 +72,8 @@ public class Task_Primes extends Task<List<Integer>> {
         try {
             fileWriter = new FileWriter(filepath, true);
             StringBuilder result_string = new StringBuilder();
-            for (Integer a : this.getResult()) {
-                result_string.append(a.toString() + " ");
+            for (Long a : this.getResult()) {
+                result_string.append(a.toString()).append(" ");
             }
             fileWriter.append(result_string.toString());
         } finally {
@@ -107,8 +84,6 @@ public class Task_Primes extends Task<List<Integer>> {
 
 
     }
-
-    ;
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
@@ -121,12 +96,12 @@ public class Task_Primes extends Task<List<Integer>> {
     }
 
     @Override
-    public List<Integer> get() throws InterruptedException, ExecutionException {
+    public List<Long> get() throws InterruptedException, ExecutionException {
         return null;
     }
 
     @Override
-    public List<Integer> get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public List<Long> get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return null;
     }
 }

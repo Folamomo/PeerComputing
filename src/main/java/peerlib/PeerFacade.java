@@ -10,7 +10,7 @@ public class PeerFacade {
 
     }
 
-    Collection<Message> getMessages() {
-
+    public Collection<Message> getMessages() {
+        return List.of();
     }
 }

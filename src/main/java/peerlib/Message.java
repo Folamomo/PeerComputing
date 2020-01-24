@@ -1,18 +1,17 @@
 package peerlib;
 
+import computinglib.TaskManager;
+
 import java.io.Serializable;
 
-public abstract class Message {
-    void encode(Serializable contents) {
+public interface Message {
+    Peer getSender();
 
-    }
+    void setSender();
 
-    void send(Peer peer) {
-    }
+    void send(Peer peer);
 
-    Serializable decode() {
-        return null;
-    }
+    Serializable decode();
 
-    ;
+    void handle(TaskManager taskManager);
 }

@@ -19,7 +19,7 @@ public class Main {
         LinkedList<Task> dep = new LinkedList<Task>();
         task.run();
         dep.add(task);
-        Task_Primes task2 = new Task_Primes(1, 30, 80, dep);
+        Task_Primes task2 = new Task_Primes(2, 30, 80, dep);
         task2.run();
         task2.saveToFile("path");
     }
