@@ -1,5 +1,16 @@
 package peerlib;
 
+import java.util.Collection;
+import java.util.List;
+
 public class PeerFacade {
-    public void SendToAll(Message message)
+    List<Peer> peers;
+
+    public void SendToAll(Message message) {
+
+    }
+
+    Collection<Message> getMessages() {
+
+    }
 }
