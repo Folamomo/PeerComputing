@@ -4,32 +4,42 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.concurrent.RunnableFuture;
 
+import static computinglib.Status.*;
+
 public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Serializable, Comparable<Task<ResultType>> {
-    //   @GeneratedValue(strategy=GenerationType.IDENTITY)
     protected final int id;
-    private boolean isDone;
-    private ResultType result;
-    private Collection<Task<ResultType>> dependencies;
+    private Status status;
+    public ResultType result;
+    public Collection<Task<ResultType>> dependencies;
 
     protected Task(int id) {
         this.id = id;
     }
-    //To jest wzorzec template method
 
     @Override
     public void run() {
-        if (dependencies.stream().allMatch(Task::isDone)) {
-            result = calculate();
-            isDone = true;
-        } else throw new RuntimeException();
+        this.status = IN_PROGRESS;
+        result = this.calculate();
+        this.status = DONE;
+    }
+
+    public boolean dependenciesReady() {
+        return dependencies.stream().allMatch(Task::isDone);
+    }
+
+    public ResultType getResult() {
+        return result;
     }
 
     abstract ResultType calculate();
 
     public boolean isDone() {
-        return isDone;
+        return status == DONE;
     }
 
+    public boolean isFree() {
+        return status == FREE;
+    }
 
     @Override
     public int hashCode() {
@@ -39,5 +49,13 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
     @Override
     public int compareTo(Task<ResultType> o) {
         return Integer.compare(id, o.id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task<?> task = (Task<?>) o;
+        return id == task.id;
     }
 }

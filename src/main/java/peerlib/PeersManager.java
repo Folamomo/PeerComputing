@@ -1,7 +1,7 @@
 package peerlib;
 
-import java.net.Socket;
+import java.net.InetAddress;
 
 public interface PeersManager {
-    Iterable<Socket> getPeers();
+    Iterable<InetAddress> getPeers();
 }

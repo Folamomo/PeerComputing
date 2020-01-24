@@ -1,10 +1,13 @@
 package computinglib;
 
-import peerlib.PeersManager;
+import peerlib.PeerFacade;
 
-public class TaskManager<ResultType> {
-    private TaskRepository<ResultType> repository;
-    private PeersManager peersManager;
+public class TaskManager implements Runnable {
+    TaskRepository<?> repository;
+    PeerFacade peers;
 
+    @Override
+    public void run() {
 
+    }
 }
