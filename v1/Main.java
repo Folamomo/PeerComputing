@@ -1,4 +1,4 @@
-package computinglib;
+package v1;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -15,12 +15,12 @@ import java.util.LinkedList;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-//        Task_Primes task = new Task_Primes(1, 2, 5, null);
-//        LinkedList<Task> dep = new LinkedList<Task>();
-//        task.run();
-//        dep.add(task);
-//        Task_Primes task2 = new Task_Primes(2, 30, 80, dep);
-//        task2.run();
-//        task2.saveToFile("path");
+        Task_Primes task = new Task_Primes(1, 2, 5, null);
+        LinkedList<Task> dep = new LinkedList<Task>();
+        task.run();
+        dep.add(task);
+        Task_Primes task2 = new Task_Primes(1, 30, 80, dep);
+        task2.run();
+        task2.saveToFile("path");
     }
 }

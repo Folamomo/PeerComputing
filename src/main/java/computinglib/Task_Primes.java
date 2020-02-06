@@ -1,5 +1,7 @@
 package computinglib;
 
+import computinglib.Task;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +16,15 @@ import java.util.stream.Collectors;
 public class Task_Primes extends Task<List<Long>> {
 
     private final Long a;
+
+    public Long getA() {
+        return a;
+    }
+
+    public Long getB() {
+        return b;
+    }
+
     private final Long b;
 
     public Task_Primes(int id, Long a, Long b, Collection<Task<List<Long>>> dependencies) {

@@ -1,7 +1,7 @@
 package computinglib;
 
-import computinglib.messages.TaskCompletedMessage;
-import computinglib.messages.TaskStartedMessage;
+//import computinglib.messages.TaskCompletedMessage;
+//import computinglib.messages.TaskStartedMessage;
 import peerlib.Peer;
 import peerlib.PeerFacade;
 
@@ -16,6 +16,11 @@ import static computinglib.Status.IN_PROGRESS;
 
 public class TaskManager<ResultType> implements Runnable {
     private Peer me;
+
+    public TaskRepository<ResultType> getRepository() {
+        return repository;
+    }
+
     private TaskRepository<ResultType> repository;
     private PeerFacade peers;
     private ThreadPoolExecutor executor;
@@ -47,13 +52,13 @@ public class TaskManager<ResultType> implements Runnable {
         task.setHandledBy(me);
         running.add(task);
         executor.execute(task);
-        peers.SendToAll(new TaskStartedMessage(task));
+//        peers.SendToAll(new TaskStartedMessage(task));
     }
 
     private void saveCompletedTasks() {
         for (Task<ResultType> task : running) {
             if (task.isDone()) {
-                peers.SendToAll(new TaskCompletedMessage(task));
+//                peers.SendToAll(new TaskCompletedMessage(task));
                 running.remove(task);
             }
         }
@@ -70,6 +75,9 @@ public class TaskManager<ResultType> implements Runnable {
         }
     }
 
+    public void addTask(Task t){
+        this.repository.addTask(t);
+    }
     public void handlePeerTaskCompletedMessage(Task<ResultType> task) {
         repository.saveDoneTaskFromPeer(task);
     }
