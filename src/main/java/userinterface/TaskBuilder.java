@@ -27,7 +27,7 @@ public class TaskBuilder extends Action{
         Long range = this.getRangeValue();
         TaskRepository tr = new TaskRepository();
         int c = 0;
-        Collection<Task_Primes> ll = new ArrayList<Task_Primes>();
+        Collection<Task_Primes> ll = new ArrayList<>();
 
         for(long i= 0; i < Math.floor(range/1000); i++){
             List<Task_Primes> dep = new ArrayList<Task_Primes>();
@@ -46,15 +46,12 @@ public class TaskBuilder extends Action{
             ll.add(task);
             c++;
         }
-
-
         System.out.print("Task added!\n");
     }
 
     private Long getRangeValue(){
         Scanner input = new Scanner(System.in);
         System.out.print("Enter range for primes computation: \n");
-        Long number = input.nextLong();
-        return number;
+        return input.nextLong();
     }
 }

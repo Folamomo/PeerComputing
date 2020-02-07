@@ -27,11 +27,11 @@ public class Task_Primes extends Task<List<Long>> {
 
     private final Long b;
 
-    public Task_Primes(int id, Long a, Long b, Collection<Task<List<Long>>> dependencies) {
+    public Task_Primes(int id, Long a, Long b, Collection<Task_Primes> dependencies) {
         super(id);
         this.a = a;
         this.b = b;
-        this.dependencies = dependencies;
+        this.dependencies.addAll(dependencies);
     }
 
     @Override

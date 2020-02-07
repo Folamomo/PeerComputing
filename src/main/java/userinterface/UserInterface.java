@@ -10,7 +10,7 @@ public class UserInterface implements Runnable {
     private CurrentPeersManager current;
     private TaskManager tm;
 
-    UserInterface(PeerFacade peers, CurrentPeersManager current, TaskManager tm){
+    public UserInterface(PeerFacade peers, CurrentPeersManager current, TaskManager tm){
         this.peers = peers;
         this.current = current;
         this.tm = tm;

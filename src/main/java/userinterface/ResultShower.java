@@ -3,7 +3,6 @@ package userinterface;
 import computinglib.TaskManager;
 import computinglib.TaskRepository;
 import computinglib.Task_Primes;
-import peerlib.CurrentPeersManager;
 
 public class ResultShower extends Action {
     public ResultShower(TaskManager manager) {
@@ -19,8 +18,8 @@ public class ResultShower extends Action {
         int id = 0;
         System.out.print("Results:\n");
 
-        while((Task_Primes)rep.getTask(id).isDone()){
-            System.out.print(rep.getTask(id).result + ", ");
+        while(rep.getTask(id).isPresent() && ((Task_Primes)rep.getTask(id).get()).isDone()){
+            System.out.print(((Task_Primes)rep.getTask(id).get()).result + ", ");
             id ++;
         }
 

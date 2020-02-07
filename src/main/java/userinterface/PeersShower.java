@@ -1,11 +1,8 @@
 package userinterface;
 
 import peerlib.CurrentPeersManager;
-import peerlib.PeerFacade;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 public class PeersShower extends Action {
     private CurrentPeersManager current;
