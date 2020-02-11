@@ -8,11 +8,13 @@ import java.net.Socket;
 public class MessageHandler implements Runnable {
     private Message message;
     private PeerClient peerClient;
+    private Integer fromPort;
 
-    MessageHandler(Message message, Integer port, Socket socket){
+    MessageHandler(Message message, Integer port, Integer fromPort, Socket socket){
         //System.out.print("Created Message Handler for message from socket:" + socket.getInetAddress().getHostAddress() + "\n");
         this.message = message;
         this.peerClient = new PeerClient(port, socket);
+        this.fromPort = fromPort;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class MessageHandler implements Runnable {
             case ERROR:
                 throw new RuntimeException();
             case HAND:
-                Message shake = new Message(MessageType.HAND, null);
+                Message shake = new Message(fromPort, MessageType.SHAKE, null);
                 try {
                     peerClient.sendMessage(shake);
                 } catch (IOException | InterruptedException e) {

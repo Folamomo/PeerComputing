@@ -42,7 +42,7 @@ public class ServerMessageReader implements Runnable{
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                System.out.println("READER Received message:" + message.type);
+                System.out.println("READER" + portNum+ " Received message:" + message.type + " from " + message.from + "\n");
                 Socket socket = null;
                 if(message.from == null){
                     System.out.print("NNNNNNNNNNIIIIIIIIIIIIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
@@ -54,7 +54,7 @@ public class ServerMessageReader implements Runnable{
                 }
 
                 try {
-                    handleMessage(message, message.from, socket);
+                    handleMessage(message, message.from, portNum, socket);
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -65,8 +65,8 @@ public class ServerMessageReader implements Runnable{
         }
     }
 
-    public void handleMessage(Message message, Integer portNum, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
-        MessageHandler messageHandler = new MessageHandler(message, portNum, socket);
+    public void handleMessage(Message message, Integer portNum, Integer fromPort, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
+        MessageHandler messageHandler = new MessageHandler(message, portNum, fromPort, socket);
         Thread handling = new Thread(messageHandler);
         handling.start();
     }

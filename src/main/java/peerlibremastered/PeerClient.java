@@ -33,7 +33,7 @@ public class PeerClient {
         ObjectOutputStream out = this.out;
 
         if (message.from == null){
-            message.setFrom(port);
+            System.out.print("Message passed to PeerCLient has no from field. \n");
         }
 
         out.writeObject(message);
