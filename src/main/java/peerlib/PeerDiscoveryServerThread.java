@@ -23,7 +23,7 @@ public class PeerDiscoveryServerThread extends Thread {
             if (networkInterface.isLoopback())
                 continue;    // Do not want to use the loopback interface.
             for (InterfaceAddress interfaceAddress : networkInterface.getInterfaceAddresses()) {
-                InetAddress broadcastGroup = interfaceAddress.getBroadcast();
+                broadcastGroup = interfaceAddress.getBroadcast();
                 if (broadcastGroup == null)
                     continue;
             }

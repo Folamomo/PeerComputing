@@ -1,17 +1,10 @@
 package peerlib;
 
-import computinglib.TaskManager;
-
 import java.io.Serializable;
 
-public interface Message {
-    Peer getSender();
-
-    void setSender();
-
-    void send(Peer peer);
-
-    Serializable decode();
-
-    void handle(TaskManager taskManager);
+public class Message {
+    Long from;
+    Long to;
+    MessageType type;
+    Serializable payload;
 }
