@@ -29,7 +29,6 @@ public class ServerMessageReader implements Runnable{
                 System.out.print("EEEE");
                 e.printStackTrace();
             }
-            System.out.print("LALLALALALAAL");
             // Reading in Integer Object from input stream.
 
 
@@ -56,6 +55,7 @@ public class ServerMessageReader implements Runnable{
 
     public void handleMessage(Message message, Integer portNum, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
         MessageHandler messageHandler = new MessageHandler(message, portNum, socket);
-        messageHandler.handle();
+        Thread handling = new Thread(messageHandler);
+        handling.start();
     }
 }

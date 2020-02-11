@@ -5,27 +5,32 @@ import peerlib.MessageType;
 import java.io.IOException;
 import java.net.Socket;
 
-public class MessageHandler {
+public class MessageHandler implements Runnable {
     private Message message;
     private PeerClient peerClient;
 
     MessageHandler(Message message, Integer port, Socket socket){
-        System.out.print("Created Message Handler for message from socket:" + socket.getInetAddress().getHostAddress() + "\n");
+        //System.out.print("Created Message Handler for message from socket:" + socket.getInetAddress().getHostAddress() + "\n");
         this.message = message;
         this.peerClient = new PeerClient(port, socket);
     }
 
-
-    public void handle() throws IOException, InterruptedException {
+    @Override
+    public void run() {
         System.out.print("\nHandling " + this.message.type + "\n");
         switch (this.message.type) {
             case ERROR:
                 throw new RuntimeException();
             case HAND:
                 Message shake = new Message(MessageType.SHAKE, null);
-                peerClient.sendMessage(shake);
+                try {
+                    peerClient.sendMessage(shake);
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
                 break;
             case SHAKE:
+                System.out.print("Message SHAKE handled");
                 break;
             case PING:
                 break;

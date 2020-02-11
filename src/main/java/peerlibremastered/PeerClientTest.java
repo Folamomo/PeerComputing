@@ -21,6 +21,8 @@ public class PeerClientTest {
 
         client.sendMessage(num);
 
+        client.sendMessage(num);
+
         server.join();
     }
 

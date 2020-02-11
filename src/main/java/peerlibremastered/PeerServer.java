@@ -84,8 +84,8 @@ public class PeerServer implements Runnable {
             }
         }
 
-    public void handleMessage(Message message, Integer portNum, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
-        MessageHandler messageHandler = new MessageHandler(message, portNum, socket);
-        messageHandler.handle();
-    }
+//    public void handleMessage(Message message, Integer portNum, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
+//        MessageHandler messageHandler = new MessageHandler(message, portNum, socket);
+//        messageHandler.handle();
+//    }
 }
