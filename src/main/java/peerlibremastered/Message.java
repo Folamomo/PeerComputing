@@ -1,4 +1,6 @@
-package peerlib;
+package peerlibremastered;
+
+import peerlib.MessageType;
 
 import java.io.Serializable;
 
@@ -8,7 +10,7 @@ public class Message implements Serializable{
     public MessageType type;
     public Serializable payload;
 
-    Message(Long from, Long to, MessageType type, Serializable payload){
+    public Message(MessageType type, Serializable payload){
         this.from = from;
         this.to = to;
         this.type = type;

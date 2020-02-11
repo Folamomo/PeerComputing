@@ -1,7 +1,7 @@
 //package computinglib.messages;
 //
 //import computinglib.Task;
-//import peerlib.Message;
+//import peerlibremastered.Message;
 //import peerlib.Peer;
 //
 //import java.io.Serializable;

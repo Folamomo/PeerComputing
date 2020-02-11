@@ -1,5 +1,7 @@
 package peerlib;
 
+import peerlibremastered.Message;
+
 import java.util.Collection;
 import java.util.List;
 

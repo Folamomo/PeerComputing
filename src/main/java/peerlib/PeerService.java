@@ -1,15 +1,14 @@
 package peerlib;
 
+import peerlibremastered.Message;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 
-import static peerlib.MessageType.ERROR;
 import static peerlib.MessageType.SHAKE;
 
 public class PeerService implements Runnable {
@@ -71,7 +70,7 @@ public class PeerService implements Runnable {
                 throw new RuntimeException();
             case HAND:
 
-                this.send(new Message(me.id, message.from, SHAKE, null));
+                this.send(new Message(SHAKE, null));
                 break;
             case SHAKE:
                 break;
