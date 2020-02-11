@@ -47,7 +47,8 @@ public class Main {
         ConnectionMenager cm2 = new ConnectionMenager(2222, connections2);
 
         cm1.sendToAll(new Message(MessageType.HAND, null));
-
+        cm2.sendToAll(new Message(MessageType.HAND, null));
+        //cm3.sendToAll(new Message(MessageType.HAND, null));
 
 
 //        TaskRepository taskRepository = new TaskRepository();
