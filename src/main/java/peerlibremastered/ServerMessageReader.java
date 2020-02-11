@@ -26,9 +26,10 @@ public class ServerMessageReader implements Runnable{
             try {
                 in = new ObjectInputStream(clientSocket.getInputStream());
             } catch (IOException e) {
+                System.out.print("EEEE");
                 e.printStackTrace();
             }
-
+            System.out.print("LALLALALALAAL");
             // Reading in Integer Object from input stream.
 
 
@@ -43,7 +44,7 @@ public class ServerMessageReader implements Runnable{
                 System.out.println("READER Received message:" + message.type);
                 try {
                     handleMessage(message, portNum, clientSocket);
-                } catch (IOException | ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 System.out.print("READER Message " + message.type + " handled successfully.\n");
@@ -53,7 +54,7 @@ public class ServerMessageReader implements Runnable{
         }
     }
 
-    public void handleMessage(Message message, Integer portNum, Socket socket) throws IOException, ClassNotFoundException {
+    public void handleMessage(Message message, Integer portNum, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
         MessageHandler messageHandler = new MessageHandler(message, portNum, socket);
         messageHandler.handle();
     }

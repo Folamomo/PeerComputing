@@ -16,7 +16,7 @@ public class MessageHandler {
     }
 
 
-    public void handle() throws IOException {
+    public void handle() throws IOException, InterruptedException {
         System.out.print("\nHandling " + this.message.type + "\n");
         switch (this.message.type) {
             case ERROR:
