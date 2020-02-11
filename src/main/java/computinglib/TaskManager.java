@@ -65,7 +65,7 @@ public class TaskManager<ResultType> implements Runnable {
     }
 
     private void handleMessagesFromPeers() {
-        peers.getMessages().forEach(message -> message.handle(this));
+       // peers.getMessages().forEach(message -> message.handle(this));
     }
 
     public void handlePeerTaskStartedMessage(int taskId, Timestamp startedAt, Peer peer) {

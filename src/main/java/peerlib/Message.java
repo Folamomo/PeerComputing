@@ -2,7 +2,7 @@ package peerlib;
 
 import java.io.Serializable;
 
-public class Message {
+public class Message implements Serializable{
     public Long from;
     public Long to;
     public MessageType type;

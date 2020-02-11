@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Peer implements Closeable {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     Long id;
     private Socket socket;
     ObjectInputStream in;
