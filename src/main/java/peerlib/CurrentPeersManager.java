@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Map;
 
-public class CurrentPeersManager implements PeersManager {
+public class CurrentPeersManager {
     //private ArrayList<Socket> peerList;
     private Map<InetAddress, Date> peerList;
     private InetAddress localInetAddress; //TODO zrobić z tego zasób współdzielony i operacje na nim w odpowiednich wątkach

@@ -15,9 +15,9 @@ public class TaskBuilder extends Action{
     private  PeerFacade peers;
     private TaskManager manager;
 
-    TaskBuilder(PeerFacade peers, TaskManager mgr){
+    TaskBuilder(PeerFacade peers, TaskManager manager){
         this.peers = peers;
-        this.manager = mgr;
+        this.manager = manager;
     }
 
 
@@ -25,25 +25,24 @@ public class TaskBuilder extends Action{
     void doAction() {
         System.out.print("Prime numer calculation\n");
         Long range = this.getRangeValue();
-        TaskRepository tr = new TaskRepository();
         int c = 0;
-        Collection<Task_Primes> ll = new ArrayList<>();
+        Collection<Task_Primes> tasks = new ArrayList<>();
 
         for(long i= 0; i < Math.floor(range/1000); i++){
-            List<Task_Primes> dep = new ArrayList<Task_Primes>();
+            List<Task_Primes> dependencies = new ArrayList<Task_Primes>();
 
-            for(Task_Primes t : ll){
+            for(Task_Primes t : tasks){
                 if (t.getB() <= Math.sqrt(i*100 + 1000)){
-                    dep.add(t);
+                    dependencies.add(t);
                 }
             }
 
 
-            Task_Primes task = new Task_Primes(c, i*1000, i*1000 + 1000, dep);
+            Task_Primes task = new Task_Primes(c, i*1000, i*1000 + 1000, dependencies);
 
             manager.addTask(task);
 
-            ll.add(task);
+            tasks.add(task);
             c++;
         }
         System.out.print("Task added!\n");

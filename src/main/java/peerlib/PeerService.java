@@ -1,21 +1,25 @@
 package peerlib;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
+
+import static peerlib.MessageType.ERROR;
+import static peerlib.MessageType.SHAKE;
 
 public class PeerService implements Runnable {
     private List<Message> messages;
-    private Map<Long, Peer> peers;
-    private Peer myself;
-    MessageServer messageServer;
+    private ConcurrentMap<Long, Peer> peers;
+    private Peer me;
 
     public PeerService() {
         messages = new ArrayList<>();
-        peers = new HashMap<>();
-        myself =
+        peers = new ConcurrentHashMap<>();
     }
 
     public void send(Message message) {
@@ -45,6 +49,43 @@ public class PeerService implements Runnable {
 
     @Override
     public void run() {
+        try {
+            while (true) {
+                for (Peer peer : peers.values()) {
+                    List<Message> messages = peer.receive();
+                    for (Message message : messages) {
+                        handleMessage(message);
+                    }
+                }
+            }
+       } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
+    void handleMessage(Message message){
+        switch (message.type) {
+            case ERROR:
+                throw new RuntimeException();
+            case HAND:
+
+                this.send(new Message(me.id, message.from, SHAKE, null));
+                break;
+            case SHAKE:
+                break;
+            case PING:
+                break;
+            case PONG:
+                break;
+            case GET_PEERS:
+                break;
+            case PEERS:
+                break;
+            case DATA:
+                break;
+            default:
+        }
     }
 }

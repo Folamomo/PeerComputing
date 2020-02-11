@@ -68,7 +68,7 @@ public class TaskManager<ResultType> implements Runnable {
         peers.getMessages().forEach(message -> message.handle(this));
     }
 
-    public void handlePeerTaskStartedMessage(int taskId, Timestamp siartedAt, Peer peer) {
+    public void handlePeerTaskStartedMessage(int taskId, Timestamp startedAt, Peer peer) {
         Task<ResultType> task = repository.getTask(taskId).orElseThrow(RuntimeException::new);
         if (task.getStatus() == IN_PROGRESS && task.getHandledBy() == me) {
 

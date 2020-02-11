@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Peer implements Closeable {
+    Long id;
     private Socket socket;
-    public Long id;
     ObjectInputStream in;
     ObjectOutputStream out;
 
-    Peer(Socket socket, Long id) throws IOException {
+    Peer(Socket socket) throws IOException {
         in = new ObjectInputStream(socket.getInputStream());
         out = new ObjectOutputStream(socket.getOutputStream());
     }
@@ -33,8 +33,8 @@ public class Peer implements Closeable {
 
     @Override
     public void close() throws IOException {
-        if (socket != null) {
-            socket.close();
-        }
+        in.close();
+        out.close();
+        socket.close();
     }
 }
