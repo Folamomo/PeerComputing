@@ -22,7 +22,7 @@ public class MessageHandler implements Runnable {
             case ERROR:
                 throw new RuntimeException();
             case HAND:
-                Message shake = new Message(MessageType.SHAKE, null);
+                Message shake = new Message(MessageType.HAND, null);
                 try {
                     peerClient.sendMessage(shake);
                 } catch (IOException | InterruptedException e) {

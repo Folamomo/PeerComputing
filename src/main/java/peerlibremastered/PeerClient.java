@@ -12,7 +12,7 @@ public class PeerClient {
     public Socket socket;
     public ObjectOutputStream out;
 
-    PeerClient(Integer port, Socket socket){
+    public PeerClient(Integer port, Socket socket){
         this.port = port;
         this.socket = socket;
         try {
@@ -32,7 +32,13 @@ public class PeerClient {
 
         ObjectOutputStream out = this.out;
 
+        if (message.from == null){
+            message.setFrom(port);
+        }
+
         out.writeObject(message);
+
+
         //out.flush();
         System.out.print("Message " + message.type + " sent.\n");
     }

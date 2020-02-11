@@ -3,6 +3,8 @@ package peerlibremastered;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class ServerMessageReader implements Runnable{
 
@@ -10,23 +12,23 @@ public class ServerMessageReader implements Runnable{
 
     public ServerMessageReader(int portNum, Socket clientSocket) {
         this.portNum = portNum;
-        this.clientSocket = clientSocket;
+        this.serverSocket = clientSocket;
     }
 
-    private Socket clientSocket;
+    private Socket serverSocket;
 
     @Override
     public void run() {
         while (true) {
-            String address = clientSocket.getInetAddress().getHostAddress();
+            String address = serverSocket.getInetAddress().getHostAddress();
             System.out.print("READER Handling adress: " +  address  + "\n");
             // Creating inout and output streams. Must creat out put stream first.
-            //ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+            //ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
             ObjectInputStream in = null;
             try {
-                in = new ObjectInputStream(clientSocket.getInputStream());
+                in = new ObjectInputStream(serverSocket.getInputStream());
             } catch (IOException e) {
-                System.out.print("EEEE");
+                System.out.print("EEEError");
                 e.printStackTrace();
             }
             // Reading in Integer Object from input stream.
@@ -41,14 +43,24 @@ public class ServerMessageReader implements Runnable{
                     e.printStackTrace();
                 }
                 System.out.println("READER Received message:" + message.type);
+                Socket socket = null;
+                if(message.from == null){
+                    System.out.print("NNNNNNNNNNIIIIIIIIIIIIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+                }
                 try {
-                    handleMessage(message, portNum, clientSocket);
+                    socket = new Socket("127.0.0.1", message.from);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    handleMessage(message, message.from, socket);
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
                 System.out.print("READER Message " + message.type + " handled successfully.\n");
-                //TODO Tutaj dochodzi kod, ale nwm czemu nie wchodzi spowrotem w while'a... Do sprawdzenia
                 System.out.flush();
+
             }
         }
     }
