@@ -9,10 +9,6 @@ public class Message implements Serializable{
         this.from = from;
     }
 
-    public void setTo(Integer to) {
-        this.to = to;
-    }
-
     public void setType(MessageType type) {
         this.type = type;
     }
@@ -22,14 +18,15 @@ public class Message implements Serializable{
     }
 
     public Integer from;
-    public Integer to;
+    public String adress;
     public MessageType type;
     public Serializable payload;
 
-    public Message(Integer from, MessageType type, Serializable payload) {
+    public Message(Integer from, String address, MessageType type, Serializable payload) {
         this.from = from;
         this.type = type;
         this.payload = payload;
+        this.adress = address;
     }
 
 

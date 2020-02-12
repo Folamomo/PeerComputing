@@ -10,11 +10,13 @@ import java.util.List;
 
 public class ConnectionMenager{
     public Integer serverPort;
+    public String serverAddress;
     public List<Connection> connections;
 
-    public ConnectionMenager(Integer serverPort) {
+    public ConnectionMenager(Integer serverPort, String serverAddress) {
         this.serverPort = serverPort;
         this.connections = new ArrayList<>();
+        this.serverAddress = serverAddress;
     }
 
     public ConnectionMenager(Integer serverport, List<Connection> connections) {
@@ -76,7 +78,7 @@ public class ConnectionMenager{
 
         //Sending new connection to current peers
         try {
-            this.sendToAll(new Message(this.serverPort, MessageType.NEW_PEER_ALERT, newConnection));
+            this.sendToAll(new Message(this.serverPort, this.serverAddress, MessageType.NEW_PEER_ALERT, newConnection));
         } catch (InterruptedException e) {
             System.out.print("AddIfNew - propagate EEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOORRRRRRRRR\n");
         }
@@ -84,7 +86,7 @@ public class ConnectionMenager{
         //Sending current connections to new peer
 
         for(Connection connection : connections) {
-            this.sendToSpecific(new Message(this.serverPort, MessageType.NEW_PEER_ALERT, connection), newConnection);
+            this.sendToSpecific(new Message(this.serverPort, this.serverAddress, MessageType.NEW_PEER_ALERT, connection), newConnection);
         }
 
         this.connections.add(newConnection);

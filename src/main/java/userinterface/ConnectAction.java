@@ -24,7 +24,7 @@ public class ConnectAction extends Action {
         System.out.print("Provide port: \n");
         int port = input.nextInt();
 
-        this.connectionMenager.sendToSpecific(new Message(connectionMenager.serverPort, MessageType.HAND,
+        this.connectionMenager.sendToSpecific(new Message(connectionMenager.serverPort, connectionMenager.serverAddress, MessageType.HAND,
                 null), new Connection(address, port));
         this.connectionMenager.addIfNew(new Connection(address, port));
     }

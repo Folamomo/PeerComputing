@@ -19,8 +19,9 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Integer appPort = 1111;
+        String appAddress = "localhost";
 
-        ConnectionMenager connectionMenager = new ConnectionMenager(appPort);
+        ConnectionMenager connectionMenager = new ConnectionMenager(appPort, appAddress);
         PeerServer server1 = new PeerServer(appPort, connectionMenager);
         Thread app1 = new Thread(server1);
         app1.start();

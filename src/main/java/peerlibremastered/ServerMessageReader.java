@@ -46,7 +46,7 @@ public class ServerMessageReader implements Runnable{
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                System.out.println("READER on port " + portNum+ " Received message:" + message.type + " from " + message.from + "\n");
+                System.out.println("READER on port " + portNum+ " Received message:" + message.type + " from " + message.from + ", "+ message.adress + "\n");
                 Socket socket = null;
                 if(message.from == null){
                     System.out.print("NNNNNNNNNNIIIIIIIIIIIIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
@@ -58,7 +58,7 @@ public class ServerMessageReader implements Runnable{
                 }
 
                 try {
-                    handleMessage(message, message.from, portNum, socket, connectionMenager);
+                    handleMessage(message, message.from, message.adress, portNum, socket, connectionMenager);
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -69,8 +69,8 @@ public class ServerMessageReader implements Runnable{
         }
     }
 
-    public void handleMessage(Message message, Integer portNum, Integer fromPort, Socket socket, ConnectionMenager connectionMenager) throws IOException, ClassNotFoundException, InterruptedException {
-        MessageHandler messageHandler = new MessageHandler(message, portNum, fromPort, socket, connectionMenager);
+    public void handleMessage(Message message, Integer portNum, String address, Integer fromPort, Socket socket, ConnectionMenager connectionMenager) throws IOException, ClassNotFoundException, InterruptedException {
+        MessageHandler messageHandler = new MessageHandler(message, portNum, address, fromPort, socket, connectionMenager);
         Thread handling = new Thread(messageHandler);
         handling.start();
     }

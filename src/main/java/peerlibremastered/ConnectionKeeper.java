@@ -19,7 +19,7 @@ public class ConnectionKeeper implements Runnable {
     public void run() {
         for (;;){
             try {
-                connectionMenager.sendToAll(new Message(connectionMenager.serverPort, MessageType.HAND,null));
+                connectionMenager.sendToAll(new Message(connectionMenager.serverPort, connectionMenager.serverAddress, MessageType.HAND,null));
                 TimeUnit.SECONDS.sleep(this.interval);
             } catch (InterruptedException e) {
                 e.printStackTrace();
