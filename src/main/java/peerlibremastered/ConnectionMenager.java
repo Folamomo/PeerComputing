@@ -10,9 +10,12 @@ import java.util.List;
 
 public class ConnectionMenager{
     public Integer serverPort;
-
-
     public List<Connection> connections;
+
+    public ConnectionMenager(Integer serverPort) {
+        this.serverPort = serverPort;
+        this.connections = new ArrayList<>();
+    }
 
     public ConnectionMenager(Integer serverport, List<Connection> connections) {
         this.serverPort = serverport;
@@ -28,8 +31,7 @@ public class ConnectionMenager{
     }
 
     public void sendToAll(Message message) throws InterruptedException {
-        System.out.print("Sending to all");
-        System.out.print(connections.size());
+        System.out.print("Sending to all\n");
 
         ArrayList<Connection> activeConnections = new ArrayList<>();
 
@@ -60,6 +62,12 @@ public class ConnectionMenager{
     }
 
     public void addIfNew(Connection newConnection){
+        if (this.connections == null){
+            this.connections.add(newConnection);
+            System.out.print("Added new connection to connection list: " + newConnection.remoteHost + ", " + newConnection.remoteServer + "\n");
+            return;
+        }
+
         if (this.connections.contains(newConnection)){
             System.out.print("This adress is already in our ocnnection list, no need to add\n");
             return;

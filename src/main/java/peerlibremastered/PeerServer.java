@@ -74,7 +74,7 @@ public class PeerServer implements Runnable {
                     System.out.print("COCOCO");
                     e.printStackTrace();
                 } finally {
-                    System.out.print("Finally closed server\n");
+                    //System.out.print("Finally closed server\n");
                     // Closing Server Socket now.
 //                    try {
 //                        this.serverSocket.close();

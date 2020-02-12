@@ -18,28 +18,39 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
+        Integer appPort = 1111;
 
-        ArrayList<Connection> connections2 = new ArrayList<Connection>();
-        connections2.add(new Connection("localhost", 2222));
-
-        ConnectionMenager cm2 = new ConnectionMenager(3333, connections2);
-
-        PeerServer server1 = new PeerServer(3333, cm2);
-
+        ConnectionMenager connectionMenager = new ConnectionMenager(appPort);
+        PeerServer server1 = new PeerServer(appPort, connectionMenager);
         Thread app1 = new Thread(server1);
-
         app1.start();
 
-        cm2.keepConnectionsStatus(6);
-
-        TimeUnit.SECONDS.sleep(10);
-        System.out.print("10s");
-        TimeUnit.SECONDS.sleep(10);
-
-        cm2.sendToAll(new Message(MessageType.HAND, null));
+        UserInterface userInterface = new UserInterface(connectionMenager);
+        Thread userInterfaceThread = new Thread(userInterface);
+        userInterfaceThread.start();
 
 
+//        ArrayList<Connection> connections2 = new ArrayList<Connection>();
+//        connections2.add(new Connection("localhost", 2222));
+//
+//        ConnectionMenager cm2 = new ConnectionMenager(3333, connections2);
+//
+//        PeerServer server1 = new PeerServer(3333, cm2);
+//
+//        Thread app1 = new Thread(server1);
+//
+//        app1.start();
+//
+//        cm2.keepConnectionsStatus(6);
+//
+//        TimeUnit.SECONDS.sleep(10);
+//        System.out.print("10s");
+//        TimeUnit.SECONDS.sleep(10);
+//
+//        cm2.sendToAll(new Message(MessageType.HAND, null));
 
+
+//---------------------------------------------------------
 
 //        PeerServer server2 = new PeerServer(2222);
 //        PeerServer server3 = new PeerServer(3333);

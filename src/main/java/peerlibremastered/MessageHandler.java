@@ -38,12 +38,6 @@ public class MessageHandler implements Runnable {
             case SHAKE:
                 System.out.print("Message SHAKE handled");
                 break;
-            case PING:
-                break;
-            case PONG:
-                break;
-            case GET_PEERS:
-                break;
             case PEERS:
                 break;
             case DATA:
