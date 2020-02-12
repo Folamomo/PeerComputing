@@ -11,15 +11,17 @@ public class MessageHandler implements Runnable {
     private ConnectionMenager connectionMenager;
     private Integer port;
     private String myAddress;
+    private String address;
 
-    MessageHandler(Message message, Integer port, String address, Integer fromPort, Socket socket, ConnectionMenager connectionMenager){
+    MessageHandler(Message message, Integer port, String address, Integer fromPort, String fromAddress, Socket socket, ConnectionMenager connectionMenager){
         //System.out.print("Created Message Handler for message from socket:" + socket.getInetAddress().getHostAddress() + "\n");
         this.message = message;
         this.peerClient = new PeerClient(port, socket);
         this.myPort = fromPort;
+        this.myAddress = address;
         this.connectionMenager = connectionMenager;
         this.port = port;
-        this.myAddress = address;
+        this.address = fromAddress;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MessageHandler implements Runnable {
                 throw new RuntimeException();
             case HAND:
                 Message shake = new Message(myPort, myAddress, MessageType.SHAKE, null);
-                connectionMenager.addIfNew(new Connection("localhost", port)); //TODO zmienic localhosta na co innego
+                connectionMenager.addIfNew(new Connection(address, port)); //TODO zmienic localhosta na co innego
                 try {
                     peerClient.sendMessage(shake);
                 } catch (InterruptedException e) {

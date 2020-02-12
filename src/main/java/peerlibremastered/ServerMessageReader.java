@@ -52,13 +52,13 @@ public class ServerMessageReader implements Runnable{
                     System.out.print("NNNNNNNNNNIIIIIIIIIIIIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
                 }
                 try {
-                    socket = new Socket("127.0.0.1", message.from);
+                    socket = new Socket(message.adress, message.from);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    handleMessage(message, message.from, message.adress, portNum, socket, connectionMenager);
+                    handleMessage(message, message.from, message.adress, portNum, connectionMenager.serverAddress, socket, connectionMenager);
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -69,8 +69,8 @@ public class ServerMessageReader implements Runnable{
         }
     }
 
-    public void handleMessage(Message message, Integer portNum, String address, Integer fromPort, Socket socket, ConnectionMenager connectionMenager) throws IOException, ClassNotFoundException, InterruptedException {
-        MessageHandler messageHandler = new MessageHandler(message, portNum, address, fromPort, socket, connectionMenager);
+    public void handleMessage(Message message, Integer portNum, String address, Integer fromPort, String fromAddress, Socket socket, ConnectionMenager connectionMenager) throws IOException, ClassNotFoundException, InterruptedException {
+        MessageHandler messageHandler = new MessageHandler(message, portNum, address, fromPort, fromAddress, socket, connectionMenager);
         Thread handling = new Thread(messageHandler);
         handling.start();
     }

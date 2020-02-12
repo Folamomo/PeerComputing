@@ -19,7 +19,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Integer appPort = 1111;
-        String appAddress = "localhost";
+        String appAddress = "192.168.0.149";
 
         ConnectionMenager connectionMenager = new ConnectionMenager(appPort, appAddress);
         PeerServer server1 = new PeerServer(appPort, connectionMenager);
