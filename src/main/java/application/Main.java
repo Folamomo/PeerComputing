@@ -25,6 +25,8 @@ public class Main {
         Thread app1 = new Thread(server1);
         app1.start();
 
+        connectionMenager.keepConnectionsStatus(6);
+
         UserInterface userInterface = new UserInterface(connectionMenager);
         Thread userInterfaceThread = new Thread(userInterface);
         userInterfaceThread.start();
