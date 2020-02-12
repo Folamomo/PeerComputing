@@ -24,7 +24,7 @@ public class PeerClient {
 
     }
 
-    public void sendMessage(Message message) throws IOException, InterruptedException {
+    public void sendMessage(Message message) throws InterruptedException {
         TimeUnit.SECONDS.sleep(4);
         System.out.print("Sending message " + message.type + " to " + socket.getInetAddress().getHostAddress() + " on port " + port + "\n");
 
@@ -36,7 +36,13 @@ public class PeerClient {
             System.out.print("Message passed to PeerCLient has no from field. \n");
         }
 
-        out.writeObject(message);
+        try {
+            out.writeObject(message);
+        } catch (IOException e) {
+            System.out.print("Could not send message " +  message.type + " to "
+                    + socket.getInetAddress().getHostAddress() + " on port " + port + "\n");
+            return;
+        }
 
 
         //out.flush();

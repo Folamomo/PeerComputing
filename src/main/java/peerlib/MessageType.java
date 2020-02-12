@@ -8,5 +8,6 @@ public enum MessageType {
     PONG,
     GET_PEERS,
     PEERS,
-    DATA
+    DATA,
+    NEW_PEER_ALERT
 }

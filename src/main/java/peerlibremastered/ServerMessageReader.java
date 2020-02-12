@@ -7,12 +7,13 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 public class ServerMessageReader implements Runnable{
-
+    private ConnectionMenager connectionMenager;
     private int portNum;
 
-    public ServerMessageReader(int portNum, Socket clientSocket) {
+    public ServerMessageReader(int portNum, Socket clientSocket, ConnectionMenager connectionMenager) {
         this.portNum = portNum;
         this.serverSocket = clientSocket;
+        this.connectionMenager = connectionMenager;
     }
 
     private Socket serverSocket;
@@ -39,10 +40,13 @@ public class ServerMessageReader implements Runnable{
                 Message message = null;
                 try {
                     message = (Message) in.readObject();
+                } catch (SocketException e){
+                    System.out.print("Closing reader. Peer down. Closing: " + address + " \n");
+                    return;
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                System.out.println("READER" + portNum+ " Received message:" + message.type + " from " + message.from + "\n");
+                System.out.println("READER on port " + portNum+ " Received message:" + message.type + " from " + message.from + "\n");
                 Socket socket = null;
                 if(message.from == null){
                     System.out.print("NNNNNNNNNNIIIIIIIIIIIIEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
@@ -54,7 +58,7 @@ public class ServerMessageReader implements Runnable{
                 }
 
                 try {
-                    handleMessage(message, message.from, portNum, socket);
+                    handleMessage(message, message.from, portNum, socket, connectionMenager);
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -65,8 +69,8 @@ public class ServerMessageReader implements Runnable{
         }
     }
 
-    public void handleMessage(Message message, Integer portNum, Integer fromPort, Socket socket) throws IOException, ClassNotFoundException, InterruptedException {
-        MessageHandler messageHandler = new MessageHandler(message, portNum, fromPort, socket);
+    public void handleMessage(Message message, Integer portNum, Integer fromPort, Socket socket, ConnectionMenager connectionMenager) throws IOException, ClassNotFoundException, InterruptedException {
+        MessageHandler messageHandler = new MessageHandler(message, portNum, fromPort, socket, connectionMenager);
         Thread handling = new Thread(messageHandler);
         handling.start();
     }

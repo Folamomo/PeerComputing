@@ -9,9 +9,11 @@ import java.net.Socket;
 public class PeerServer implements Runnable {
     public Integer portNum;
     private ServerSocket serverSocket;
+    private ConnectionMenager connectionMenager;
 
-    public PeerServer(int portNum) throws IOException {
+    public PeerServer(int portNum, ConnectionMenager connectionMenager) throws IOException {
         this.portNum = portNum;
+        this.connectionMenager = connectionMenager;
     }
 
     public void start(){
@@ -39,8 +41,8 @@ public class PeerServer implements Runnable {
                 try {
                     // Accept a client connection once Server recieves one.
                     Socket clientSocket = this.serverSocket.accept();
-                    System.out.print("SERWER Accepted connection.\n");
-                    ServerMessageReader serverMessageReader = new ServerMessageReader(this.portNum, clientSocket);
+                    System.out.print("SERWER Accepted connection." + "\n");
+                    ServerMessageReader serverMessageReader = new ServerMessageReader(this.portNum, clientSocket, connectionMenager);
                     new Thread(serverMessageReader).start();
 
 //                    String address = clientSocket.getInetAddress().getHostAddress();

@@ -1,12 +1,15 @@
 package peerlibremastered;
 
+import peerlib.MessageType;
+
 import java.io.IOException;
 import java.net.CookiePolicy;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConnectionMenager{
-    private Integer serverPort;
+    public Integer serverPort;
 
 
     public List<Connection> connections;
@@ -16,21 +19,76 @@ public class ConnectionMenager{
         this.connections = connections;
     }
 
-    public void sendToAll(Message message) throws IOException, InterruptedException {
+    public void sendToSpecific(Message message, Connection connection){
+        try {
+            new PeerClient(connection.remoteHost, new Socket(connection.remoteServer, connection.remoteHost) ).sendMessage(message);
+        } catch (InterruptedException | IOException e) {
+            System.out.print("Could not send to specific: " + connection.remoteServer + ", " + connection.remoteHost + "\n" );
+        }
+    }
+
+    public void sendToAll(Message message) throws InterruptedException {
         System.out.print("Sending to all");
         System.out.print(connections.size());
+
+        ArrayList<Connection> activeConnections = new ArrayList<>();
+
         for(Connection connection : connections){
-            System.out.print("Sending to " + connection.remoteHost);
+            System.out.print("Sending to " + connection.remoteHost + "\n");
             if (message.from == null){
                 message.setFrom(this.serverPort);
             }
 
-            Socket s = new Socket(connection.remoteServer, connection.remoteHost);
+            Socket s;
+            try {
+                s = new Socket(connection.remoteServer, connection.remoteHost);
+            } catch (IOException e) {
+                System.out.print("Could not establish connection with: " + connection.remoteServer + ", " + connection.remoteHost +
+                        " removing from connection list. \n");
+                continue;
+            }
 
             PeerClient p = new PeerClient(connection.remoteHost, s );
             p.sendMessage(message);
 
+            activeConnections.add(connection);
+
         }
+
+        this.connections = activeConnections;
+
     }
+
+    public void addIfNew(Connection newConnection){
+        if (this.connections.contains(newConnection)){
+            System.out.print("This adress is already in our ocnnection list, no need to add\n");
+            return;
+        }
+        System.out.print("Propagating new connection to all peers\n");
+
+        //Sending new connection to current peers
+        try {
+            this.sendToAll(new Message(this.serverPort, MessageType.NEW_PEER_ALERT, newConnection));
+        } catch (InterruptedException e) {
+            System.out.print("AddIfNew - propagate EEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOORRRRRRRRR\n");
+        }
+
+        //Sending current connections to new peer
+
+        for(Connection connection : connections) {
+            this.sendToSpecific(new Message(this.serverPort, MessageType.NEW_PEER_ALERT, connection), newConnection);
+        }
+
+        this.connections.add(newConnection);
+        System.out.print("Added new connection to connection list: " + newConnection.remoteHost + ", " + newConnection.remoteServer + "\n");
+
+    }
+
+
+    public void keepConnectionsStatus(Integer interval){
+        ConnectionKeeper connectionKeeper = new ConnectionKeeper(this, interval);
+        new Thread(connectionKeeper).start();
+    }
+
 
 }
