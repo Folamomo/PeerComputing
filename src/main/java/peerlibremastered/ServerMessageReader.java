@@ -62,9 +62,10 @@ public class ServerMessageReader implements Runnable{
                 } catch (IOException | ClassNotFoundException | InterruptedException e) {
                     e.printStackTrace();
                 }
+
                 System.out.print("READER Message " + message.type + " handled successfully.\n");
                 System.out.flush();
-
+                return;
             }
         }
     }

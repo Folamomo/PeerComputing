@@ -31,8 +31,8 @@ public class MessageHandler implements Runnable {
             case ERROR:
                 throw new RuntimeException();
             case HAND:
-                Message shake = new Message(myPort, myAddress, MessageType.SHAKE, null);
-                connectionMenager.addIfNew(new Connection(address, port)); //TODO zmienic localhosta na co innego
+                Message shake = new Message(myPort, address, MessageType.SHAKE, null);
+                connectionMenager.addIfNew(new Connection(myAddress, port)); //TODO zmienic localhosta na co innego
                 try {
                     peerClient.sendMessage(shake);
                 } catch (InterruptedException e) {
