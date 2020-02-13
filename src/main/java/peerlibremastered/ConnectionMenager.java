@@ -3,7 +3,6 @@ package peerlibremastered;
 import peerlib.MessageType;
 
 import java.io.IOException;
-import java.net.CookiePolicy;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ public class ConnectionMenager{
     public Integer serverPort;
     public String serverAddress;
     public List<Connection> connections;
+    public PeerFacade peerFacade;
 
     public ConnectionMenager(Integer serverPort, String serverAddress) {
         this.serverPort = serverPort;
@@ -19,14 +19,20 @@ public class ConnectionMenager{
         this.serverAddress = serverAddress;
     }
 
+    public ConnectionMenager(Integer serverPort, String serverAddress, PeerFacade peerFacade) {
+        this.serverPort = serverPort;
+        this.serverAddress = serverAddress;
+        this.peerFacade = peerFacade;
+    }
+
     public ConnectionMenager(Integer serverport, List<Connection> connections) {
         this.serverPort = serverport;
         this.connections = connections;
     }
 
-    public void sendToSpecific(Message message, Connection connection){
+    public void sendToSpecific(Message message, Connection connection) {
         try {
-            new PeerClient(connection.remoteHost, new Socket(connection.remoteServer, connection.remoteHost) ).sendMessage(message);
+            new PeerClient(connection.remoteHost, new Socket(connection.remoteServer, connection.remoteHost)).sendMessage(message);
         } catch (InterruptedException | IOException e) {
             System.out.print("Could not send to specific: " + connection.remoteServer + ", " + connection.remoteHost + "\n" );
         }
@@ -95,10 +101,13 @@ public class ConnectionMenager{
     }
 
 
-    public void keepConnectionsStatus(Integer interval){
+    public void keepConnectionsStatus(Integer interval) {
         ConnectionKeeper connectionKeeper = new ConnectionKeeper(this, interval);
         new Thread(connectionKeeper).start();
     }
 
+    public void saveMessage(Message message) {
+        peerFacade.addMessage(message);
+    }
 
 }

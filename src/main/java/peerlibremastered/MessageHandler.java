@@ -45,6 +45,7 @@ public class MessageHandler implements Runnable {
             case PEERS:
                 break;
             case DATA:
+                connectionMenager.saveMessage(message);
                 break;
             case NEW_PEER_ALERT:
                 Connection connection = (Connection) message.payload;
