@@ -55,6 +55,7 @@ public class ConnectionMenager{
             } catch (IOException e) {
                 System.out.print("Could not establish connection with: " + connection.remoteServer + ", " + connection.remoteHost +
                         " removing from connection list. \n");
+                saveMessage(new Message(connection.remoteHost, connection.remoteServer, MessageType.ERROR, null));
                 continue;
             }
 

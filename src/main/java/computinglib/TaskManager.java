@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
 
+import static computinglib.Status.FREE;
 import static computinglib.Status.IN_PROGRESS;
-import static peerlib.MessageType.DATA;
-import static peerlib.MessageType.REQUEST_DATA;
+import static peerlib.MessageType.*;
 
 public class TaskManager<ResultType> implements Runnable {
     public TaskRepository<ResultType> getRepository() {
@@ -101,6 +101,12 @@ public class TaskManager<ResultType> implements Runnable {
                                     task),
                             new Connection(message.adress, message.from));
                 }
+            }
+            else if (message.type == ERROR) {
+                repository.tasks.values()
+                        .parallelStream()
+                        .filter(t->t.getStatus() == IN_PROGRESS)
+                        .forEach(t->t.setStatus(FREE));
             }
         }
     }

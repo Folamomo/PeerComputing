@@ -15,7 +15,8 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
     protected final int id;
     private Instant startedAt;
     private Status status;
-    public Peer handledBy;
+    public String handledByAdress;
+    public Integer handledByHost;
     public ResultType result;
     public Collection<Task<ResultType>> dependencies;
 
@@ -73,13 +74,6 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
         this.status = status;
     }
 
-    public Peer getHandledBy() {
-        return handledBy;
-    }
-
-    public void setHandledBy(Peer handledBy) {
-        this.handledBy = handledBy;
-    }
 
     public void setResult(ResultType result) {
         this.result = result;
