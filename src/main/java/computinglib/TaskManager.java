@@ -2,6 +2,7 @@ package computinglib;
 
 //import computinglib.messages.TaskCompletedMessage;
 //import computinglib.messages.TaskStartedMessage;
+import peerlibremastered.Connection;
 import peerlibremastered.Message;
 import peerlibremastered.PeerFacade;
 
@@ -10,13 +11,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static computinglib.Status.IN_PROGRESS;
 import static peerlib.MessageType.DATA;
+import static peerlib.MessageType.REQUEST_DATA;
 
 public class TaskManager<ResultType> implements Runnable {
     public TaskRepository<ResultType> getRepository() {
@@ -33,8 +32,9 @@ public class TaskManager<ResultType> implements Runnable {
     public TaskManager(TaskRepository<ResultType> repository, PeerFacade peers) {
         this.repository = repository;
         this.peers = peers;
-        executor = new ThreadPoolExecutor(coreThreads, coreThreads, 1, TimeUnit.SECONDS, new ArrayBlockingQueue<>(8));
+        executor = new ThreadPoolExecutor(0, coreThreads, 1, TimeUnit.SECONDS, new ArrayBlockingQueue<>(8));
         running = new ConcurrentLinkedQueue<>();
+//        executor.setRejectedExecutionHandler();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class TaskManager<ResultType> implements Runnable {
     }
 
     private void runTasksIfFreeThreads() {
-        if (executor.getActiveCount() < coreThreads) {
+        if (executor.getQueue().remainingCapacity() > 1) {
             repository.getFirstFreeTask().ifPresent(this::runTask);
         }
     }
@@ -88,6 +88,18 @@ public class TaskManager<ResultType> implements Runnable {
                         running.remove(myVersion.get());
                     }
                     repository.addTask(task);
+                }
+            }
+            else if (message.type == REQUEST_DATA) {
+
+                for (Task task : repository.tasks.values()){
+                    peers.sendToSpecific(
+                            new Message(
+                                    peers.connectionMenager.serverPort,
+                                    peers.connectionMenager.serverAddress,
+                                    DATA,
+                                    task),
+                            new Connection(message.adress, message.from));
                 }
             }
         }

@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class PeerFacade {
 
     private Collection<Message> messages = new ConcurrentLinkedQueue<>();
-    private ConnectionMenager connectionMenager;
+    public ConnectionMenager connectionMenager;
 
     public PeerFacade(ConnectionMenager connectionMenager) {
         this.connectionMenager = connectionMenager;
@@ -22,6 +22,9 @@ public class PeerFacade {
         }
     }
 
+    public void sendToSpecific(Message message, Connection connection) {
+        connectionMenager.sendToSpecific(message, connection);
+    }
     public Collection<Message> getAllMessages() {
         Collection<Message> result = messages;
         messages = new ConcurrentLinkedQueue<>();

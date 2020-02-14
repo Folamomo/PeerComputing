@@ -68,6 +68,12 @@ public class Task_Primes extends Task<List<Long>> {
 
 //        System.out.println(result);
 
+
+        try {
+            TimeUnit.MILLISECONDS.sleep(50L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //Sito
         for (Long i : other_results) {
             for (long j = a - a % i; j <= b; j = j + i) {

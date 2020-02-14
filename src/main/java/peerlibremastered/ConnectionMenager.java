@@ -73,6 +73,7 @@ public class ConnectionMenager{
         if (this.connections == null){
             this.connections.add(newConnection);
             System.out.print("Added new connection to connection list: " + newConnection.remoteHost + ", " + newConnection.remoteServer + "\n");
+            saveMessage(new Message(newConnection.remoteHost, newConnection.remoteServer, MessageType.REQUEST_DATA, null));
             return;
         }
 
