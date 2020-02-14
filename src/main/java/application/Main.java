@@ -3,10 +3,8 @@ package application;
 
 import computinglib.TaskManager;
 import computinglib.TaskRepository;
-import peerlib.CurrentPeersManager;
-import peerlib.MessageType;
-import peerlib.PeerFacade;
 import peerlibremastered.*;
+import userinterface.TaskBuilder;
 import userinterface.UserInterface;
 
 import java.io.IOException;
@@ -27,6 +25,17 @@ public class Main {
         app1.start();
 
         connectionMenager.keepConnectionsStatus(6);
+
+
+        PeerFacade peerFacade = new PeerFacade(connectionMenager);
+        TaskManager<List<Long>> manager = new TaskManager<>(new TaskRepository<>(), peerFacade);
+
+        TaskBuilder builder = new TaskBuilder(peerFacade, manager);
+
+        Thread taskThread = new Thread(manager);
+        taskThread.start();
+
+        builder.doAction();
 
         UserInterface userInterface = new UserInterface(connectionMenager);
         Thread userInterfaceThread = new Thread(userInterface);

@@ -28,7 +28,7 @@ public class TaskManager<ResultType> implements Runnable {
     private ThreadPoolExecutor executor;
     private Collection<Task<ResultType>> running;
 
-    private int coreThreads = 4;
+    private int coreThreads = 8;
 
     public TaskManager(TaskRepository<ResultType> repository, PeerFacade peers) {
         this.repository = repository;
@@ -75,17 +75,20 @@ public class TaskManager<ResultType> implements Runnable {
     private void handleMessagesFromPeers() {
         Collection<Message> messages = peers.getAllMessages();
         for (Message message : messages){
-            Task<ResultType> task = (Task<ResultType>) message.payload;
-            if(task.isDone()) repository.saveDoneTaskFromPeer(task);
-            else if(task.isFree()) repository.addTask(task);
-            else if (task.getStatus() == IN_PROGRESS){
-                Optional<Task<ResultType>> myVersion = repository.getTask(task.id);
-                if (myVersion.isEmpty()) repository.addTask(task);
-                if (myVersion.get().getStatus()==IN_PROGRESS && myVersion.get().getStartedAt().isAfter(task.getStartedAt())){
-                    myVersion.get().cancel(true);
-                    running.remove(myVersion.get());
+            if (message.type == DATA) {
+                Task<ResultType> task = (Task<ResultType>) message.payload;
+                if (task.isDone()) repository.saveDoneTaskFromPeer(task);
+                else if (task.isFree()) repository.addTask(task);
+                else if (task.getStatus() == IN_PROGRESS) {
+
+                    Optional<Task<ResultType>> myVersion = repository.getTask(task.id);
+                    if (myVersion.isEmpty()) repository.addTask(task);
+                    if (myVersion.get().getStatus() == IN_PROGRESS && myVersion.get().getStartedAt().isAfter(task.getStartedAt())) {
+                        myVersion.get().cancel(true);
+                        running.remove(myVersion.get());
+                    }
+                    repository.addTask(task);
                 }
-                repository.addTask(task);
             }
         }
     }

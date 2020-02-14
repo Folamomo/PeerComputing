@@ -1,12 +1,18 @@
 package peerlibremastered;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PeerFacade {
 
-    private List<Message> messages;
+    private Collection<Message> messages = new ConcurrentLinkedQueue<>();
     private ConnectionMenager connectionMenager;
+
+    public PeerFacade(ConnectionMenager connectionMenager) {
+        this.connectionMenager = connectionMenager;
+    }
 
     public void sendToAll(Message message){
         try {
@@ -16,9 +22,9 @@ public class PeerFacade {
         }
     }
 
-    public List<Message> getAllMessages() {
-        List<Message> result = messages;
-        messages = new ArrayList<>();
+    public Collection<Message> getAllMessages() {
+        Collection<Message> result = messages;
+        messages = new ConcurrentLinkedQueue<>();
         return result;
     }
 
