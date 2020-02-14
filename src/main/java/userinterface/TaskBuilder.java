@@ -1,11 +1,13 @@
 package userinterface;
 
-import computinglib.Task;
 import computinglib.TaskManager;
-import computinglib.TaskRepository;
-import computinglib.Task_Primes;
-import peerlib.PeerFacade;
+import application.Task_Primes;
+import peerlibremastered.PeerFacade;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,18 +15,19 @@ import java.util.Scanner;
 
 public class TaskBuilder extends Action{
     private  PeerFacade peers;
-    private TaskManager manager;
+    private TaskManager<List<Long>> manager;
 
-    TaskBuilder(PeerFacade peers, TaskManager manager){
+    public TaskBuilder(PeerFacade peers, TaskManager<List<Long>> manager){
         this.peers = peers;
         this.manager = manager;
     }
 
 
     @Override
-    void doAction() {
+    public void doAction() {
         System.out.print("Prime numer calculation\n");
-        Long range = this.getRangeValue();
+//        Long range = this.getRangeValue();
+        Long range = 1000000L;
         int c = 0;
         Collection<Task_Primes> tasks = new ArrayList<>();
 
@@ -49,8 +52,13 @@ public class TaskBuilder extends Action{
     }
 
     private Long getRangeValue(){
-        Scanner input = new Scanner(System.in);
+        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Enter range for primes computation: \n");
-        return input.nextLong();
+        try {
+            return Long.valueOf(input.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0L;
     }
 }

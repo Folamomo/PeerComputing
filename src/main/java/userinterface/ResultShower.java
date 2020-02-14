@@ -2,7 +2,7 @@ package userinterface;
 
 import computinglib.TaskManager;
 import computinglib.TaskRepository;
-import computinglib.Task_Primes;
+import application.Task_Primes;
 
 public class ResultShower extends Action {
     public ResultShower(TaskManager manager) {

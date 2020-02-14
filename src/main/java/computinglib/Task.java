@@ -4,7 +4,9 @@ import peerlib.Peer;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.RunnableFuture;
 
 import static computinglib.Status.*;
@@ -19,25 +21,29 @@ public abstract class Task<ResultType> implements RunnableFuture<ResultType>, Se
 
     protected Task(int id) {
         this.id = id;
+        status = FREE;
+        dependencies = new ConcurrentLinkedQueue<>();
     }
 
     @Override
     public void run() {
-        this.status = IN_PROGRESS;
-        this.startedAt = Instant.now();
-        result = this.calculate();
-        this.status = DONE;
+        if (this.status == FREE) {
+            this.status = IN_PROGRESS;
+            this.startedAt = Instant.now();
+            result = this.calculate();
+            this.status = DONE;
+        }
     }
 
     public boolean dependenciesReady() {
-        return dependencies.stream().allMatch(Task::isDone);
+        return dependencies.parallelStream().allMatch(Task::isDone);
     }
 
     public ResultType getResult() {
         return result;
     }
 
-    abstract ResultType calculate();
+    public abstract ResultType calculate();
 
     public boolean isDone() {
         return status == DONE;

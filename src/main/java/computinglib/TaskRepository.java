@@ -6,11 +6,12 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import static computinglib.Status.IN_PROGRESS;
 
 public class TaskRepository<ResultType> {
-    SortedMap<Integer, Task<ResultType>> tasks = new TreeMap<>();
+    SortedMap<Integer, Task<ResultType>> tasks = new ConcurrentSkipListMap<>();
 
     public void addTasks(Collection<Task<ResultType>> toAdd) {
         toAdd.forEach(task -> tasks.put(task.id, task));
@@ -25,7 +26,7 @@ public class TaskRepository<ResultType> {
     }
 
     public Optional<Task<ResultType>> getFirstFreeTask() {
-        return tasks.values().stream().filter(Task::isFree).filter(Task::dependenciesReady).findFirst();
+        return tasks.values().parallelStream().filter(Task::isFree).filter(Task::dependenciesReady).findFirst();
     }
 
     public void saveDoneTaskFromPeer(Task<ResultType> task) {

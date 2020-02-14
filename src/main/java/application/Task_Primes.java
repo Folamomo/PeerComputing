@@ -1,4 +1,4 @@
-package computinglib;
+package application;
 
 import computinglib.Task;
 
@@ -32,6 +32,7 @@ public class Task_Primes extends Task<List<Long>> {
         this.a = a;
         this.b = b;
         this.dependencies.addAll(dependencies);
+        this.result = new ArrayList<>();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class Task_Primes extends Task<List<Long>> {
 //                other_results.add(i);
 //            }
 
-            System.out.println(other_results);
+//            System.out.println(other_results);
         } else {
             other_results = new ArrayList<>();
             for (long i = 2; i < Math.sqrt(b); i++) {
@@ -65,7 +66,7 @@ public class Task_Primes extends Task<List<Long>> {
             result.add(i);
         }
 
-        System.out.println(result);
+//        System.out.println(result);
 
         //Sito
         for (Long i : other_results) {
@@ -73,7 +74,7 @@ public class Task_Primes extends Task<List<Long>> {
                 result.remove(j);
             }
         }
-        System.out.println(result);
+        System.out.println("Calculated primes:\n" + result.toString());
         return result;
     }
 
