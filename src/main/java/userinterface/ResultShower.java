@@ -3,6 +3,7 @@ package userinterface;
 import computinglib.TaskManager;
 import computinglib.TaskRepository;
 import application.Task_Primes;
+import peerlibremastered.Message;
 
 public class ResultShower extends Action {
     public ResultShower(TaskManager manager) {
@@ -13,14 +14,11 @@ public class ResultShower extends Action {
 
     @Override
     void doAction() {
-
-        TaskRepository rep = manager.getRepository();
-        int id = 0;
-        System.out.print("Results:\n");
-
-        while(rep.getTask(id).isPresent() && ((Task_Primes)rep.getTask(id).get()).isDone()){
-            System.out.print(((Task_Primes)rep.getTask(id).get()).result + ", ");
-            id ++;
+        System.out.print("Results: \n");
+        for(Object task : manager.getRepository().tasks.values()){
+            if (((Task_Primes)task).isDone()){
+                System.out.print(((Task_Primes) task).result + " \n");
+            }
         }
 
 

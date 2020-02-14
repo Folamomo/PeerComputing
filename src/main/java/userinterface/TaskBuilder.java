@@ -14,11 +14,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TaskBuilder extends Action{
-    private  PeerFacade peers;
     private TaskManager<List<Long>> manager;
 
-    public TaskBuilder(PeerFacade peers, TaskManager<List<Long>> manager){
-        this.peers = peers;
+    public TaskBuilder( TaskManager<List<Long>> manager){
         this.manager = manager;
     }
 

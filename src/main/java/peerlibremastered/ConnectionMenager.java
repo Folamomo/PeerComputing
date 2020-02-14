@@ -11,6 +11,11 @@ public class ConnectionMenager{
     public Integer serverPort;
     public String serverAddress;
     public List<Connection> connections;
+
+    public void setPeerFacade(PeerFacade peerFacade) {
+        this.peerFacade = peerFacade;
+    }
+
     public PeerFacade peerFacade;
 
     public ConnectionMenager(Integer serverPort, String serverAddress) {
@@ -39,7 +44,7 @@ public class ConnectionMenager{
     }
 
     public void sendToAll(Message message) throws InterruptedException {
-        System.out.print("Sending to all\n");
+        //System.out.print("Sending to all\n");
 
         ArrayList<Connection> activeConnections = new ArrayList<>();
 
@@ -56,6 +61,7 @@ public class ConnectionMenager{
                 System.out.print("Could not establish connection with: " + connection.remoteServer + ", " + connection.remoteHost +
                         " removing from connection list. \n");
                 saveMessage(new Message(connection.remoteHost, connection.remoteServer, MessageType.ERROR, null));
+
                 continue;
             }
 

@@ -70,7 +70,7 @@ public class Task_Primes extends Task<List<Long>> {
 
 
         try {
-            TimeUnit.MILLISECONDS.sleep(50L);
+            TimeUnit.MILLISECONDS.sleep(400L);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -80,7 +80,7 @@ public class Task_Primes extends Task<List<Long>> {
                 result.remove(j);
             }
         }
-        System.out.println("Calculated primes:\n" + result.toString());
+        //System.out.println("Calculated primes:\n" + result.toString());
         return result;
     }
 

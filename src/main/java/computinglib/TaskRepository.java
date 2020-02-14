@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import static computinglib.Status.IN_PROGRESS;
 
 public class TaskRepository<ResultType> {
-    SortedMap<Integer, Task<ResultType>> tasks = new ConcurrentSkipListMap<>();
+    public SortedMap<Integer, Task<ResultType>> tasks = new ConcurrentSkipListMap<>();
 
     public void addTasks(Collection<Task<ResultType>> toAdd) {
         toAdd.forEach(task -> tasks.put(task.id, task));
@@ -35,7 +35,7 @@ public class TaskRepository<ResultType> {
 
     public void markAsInProgress(int id, Peer peer) {
         Task<ResultType> task = tasks.get(id);
-        task.setHandledBy(peer);
+        //task.setHandledBy(peer);
         task.setStatus(IN_PROGRESS);
     }
 }

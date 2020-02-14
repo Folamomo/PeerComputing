@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Integer appPort = 1112;
-        String appAddress = "192.168.100.1";
+        Integer appPort = 2222;
+        String appAddress = "localhost";
 
         ConnectionMenager connectionMenager = new ConnectionMenager(appPort, appAddress);
         PeerServer server1 = new PeerServer(appPort, connectionMenager);
@@ -28,16 +28,19 @@ public class Main {
 
 
         PeerFacade peerFacade = new PeerFacade(connectionMenager);
+
+        connectionMenager.setPeerFacade(peerFacade);
+
         TaskManager<List<Long>> manager = new TaskManager<>(new TaskRepository<>(), peerFacade);
 
-        TaskBuilder builder = new TaskBuilder(peerFacade, manager);
+        TaskBuilder builder = new TaskBuilder(manager);
 
         Thread taskThread = new Thread(manager);
         taskThread.start();
 
-        builder.doAction();
+        //builder.doAction();
 
-        UserInterface userInterface = new UserInterface(connectionMenager);
+        UserInterface userInterface = new UserInterface(connectionMenager, manager);
         Thread userInterfaceThread = new Thread(userInterface);
         userInterfaceThread.start();
 

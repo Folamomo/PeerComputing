@@ -21,7 +21,7 @@ public class NoPeersTest {
 
         TaskManager<List<Long>> manager = new TaskManager<>(new TaskRepository<List<Long>>(), peerFacade);
 
-        TaskBuilder builder = new TaskBuilder(peerFacade, manager);
+        TaskBuilder builder = new TaskBuilder(manager);
 
         Thread taskThread = new Thread(manager);
         taskThread.start();

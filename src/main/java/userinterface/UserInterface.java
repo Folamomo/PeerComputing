@@ -34,8 +34,10 @@ public class UserInterface implements Runnable {
             switch (number){
                 case 0:
                     action = new ConnectAction(connectionMenager);
+                    legit_choice = true;
+                    break;
                 case 1:
-                    //action = new TaskBuilder(this.peers, this.tm);
+                    action = new TaskBuilder(this.tm);
                     legit_choice = true;
                     break;
                 case 2:
