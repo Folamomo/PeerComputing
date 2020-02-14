@@ -1,4 +1,4 @@
-package peerlib;
+package peerlibremastered;
 
 public enum MessageType {
     ERROR,

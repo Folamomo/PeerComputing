@@ -1,7 +1,5 @@
 package peerlibremastered;
 
-import peerlib.MessageType;
-
 import java.io.Serializable;
 
 public class Message implements Serializable{

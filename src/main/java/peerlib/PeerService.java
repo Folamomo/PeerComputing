@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Predicate;
 
-import static peerlib.MessageType.SHAKE;
+import static peerlibremastered.MessageType.SHAKE;
 
 public class PeerService implements Runnable {
     private List<Message> messages;

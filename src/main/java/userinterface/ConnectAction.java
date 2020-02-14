@@ -1,6 +1,6 @@
 package userinterface;
 
-import peerlib.MessageType;
+import peerlibremastered.MessageType;
 import peerlibremastered.Connection;
 import peerlibremastered.ConnectionMenager;
 import peerlibremastered.Message;

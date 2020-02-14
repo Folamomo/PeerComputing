@@ -1,9 +1,6 @@
 package peerlibremastered;
 
-import peerlib.MessageType;
-
 import java.io.IOException;
-import java.net.CookiePolicy;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;

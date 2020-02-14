@@ -1,13 +1,8 @@
 package peerlibremastered;
 
 import org.junit.Test;
-import peerlib.MessageType;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 public class PeerServerTest {
 

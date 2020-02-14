@@ -1,7 +1,5 @@
 package peerlibremastered;
 
-import peerlib.MessageType;
-
 import java.util.concurrent.TimeUnit;
 
 public class ConnectionKeeper implements Runnable {

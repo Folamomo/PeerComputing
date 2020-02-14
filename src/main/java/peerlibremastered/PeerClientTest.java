@@ -1,10 +1,8 @@
 package peerlibremastered;
 
 import org.junit.Test;
-import peerlib.MessageType;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class PeerClientTest {
     @Test

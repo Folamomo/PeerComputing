@@ -1,7 +1,5 @@
 package peerlibremastered;
 
-import peerlib.MessageType;
-
 import java.net.Socket;
 
 public class MessageHandler implements Runnable {
